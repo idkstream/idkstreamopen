@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDK — Вход</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-card {
+            background: #050505;
+            padding: 40px;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+        .logo { max-width: 150px; margin-bottom: 25px; border-radius: 10px; }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #111;
+            border: 1px solid #222;
+            color: #fff;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+        }
+        input:focus { border-color: #555; }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .btn:hover { background: #ddd; }
+
+        .register-link {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #555;
+        }
+        .register-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        .register-link a:hover { text-decoration: underline; }
+
+        #status { margin-top: 20px; font-size: 12px; min-height: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <img src="idk_logo.png" alt="IDK">
+        
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Пароль">
+        
+        <button class="btn" onclick="handleLogin()">Войти</button>
+        
+        <div id="status"></div>
+
+        <div class="register-link">
+            Нет аккаунта? <a href="register.html">Создать</a>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://oogxduktdzweqvbfxeiz.supabase.co';
+        const supabaseKey = 'sb_publishable_g8o9XJ0Emk0bWQZD3C4h2A_FH-JVd_M';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const status = document.getElementById('status');
+
+            status.style.color = "#888";
+            status.innerText = "Проверка данных...";
+
+            const { data, error } = await _supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                status.style.color = "#ff4444";
+                status.innerText = "Ошибка: " + error.message;
+            } else {
+                status.style.color = "#00ff00";
+                status.innerText = "Вход выполнен! Загрузка...";
+                // Редирект на главную страницу после входа
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+        }
+    </script>
+
+</body>
+</html>
