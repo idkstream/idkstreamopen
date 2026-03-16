@@ -26,7 +26,6 @@
             text-align: center;
         }
         .logo { max-width: 150px; margin-bottom: 25px; border-radius: 10px; }
-        h2 { font-size: 14px; letter-spacing: 3px; color: #444; margin-bottom: 30px; }
         
         input {
             width: 100%;
@@ -52,8 +51,24 @@
             cursor: pointer;
             transition: 0.3s;
             margin-top: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
         }
         .btn:hover { background: #ddd; }
+
+        /* Та самая кнопка/ссылка внизу */
+        .login-link {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #555;
+        }
+        .login-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        .login-link a:hover { text-decoration: underline; }
 
         #status { margin-top: 20px; font-size: 12px; min-height: 18px; }
     </style>
@@ -61,16 +76,19 @@
 <body>
 
     <div class="auth-card">
-        <img src="idk_logo.png" alt="IDK" class="logo">
-        <h2>REGISTRATION</h2>
+        <img src="idk_logo.png" alt="IDK">
         
         <input type="text" id="username" placeholder="Никнейм">
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Пароль">
         
-        <button class="btn" onclick="handleRegister()">СОЗДАТЬ АККАУНТ</button>
+        <button class="btn" onclick="handleRegister()">Создать аккаунт</button>
         
         <div id="status"></div>
+
+        <div class="login-link">
+            Уже есть аккаунт? <a href="login.html">Войти</a>
+        </div>
     </div>
 
     <script>
@@ -84,15 +102,9 @@
             const username = document.getElementById('username').value;
             const status = document.getElementById('status');
 
-            if (!username) {
-                status.innerText = "Введите никнейм";
-                return;
-            }
-
             status.style.color = "#888";
-            status.innerText = "Создание аккаунта...";
+            status.innerText = "Регистрируем...";
 
-            // 1. Регистрация в Auth
             const { data, error } = await _supabase.auth.signUp({
                 email: email,
                 password: password,
@@ -101,21 +113,11 @@
             if (error) {
                 status.style.color = "#ff4444";
                 status.innerText = error.message;
-            } else if (data.user) {
-                // 2. Создание записи в твоей таблице profiles
-                const { error: profileError } = await _supabase
-                    .from('profiles')
-                    .insert([
-                        { id: data.user.id, username: username }
-                    ]);
-
-                if (profileError) {
-                    status.style.color = "#ff4444";
-                    status.innerText = "Ошибка профиля: " + profileError.message;
-                } else {
-                    status.style.color = "#00ff00";
-                    status.innerText = "Успех! Подтвердите почту и входите.";
-                }
+            } else {
+                // Создаем профиль в твоей таблице
+                await _supabase.from('profiles').insert([{ id: data.user.id, username: username }]);
+                status.style.color = "#00ff00";
+                status.innerText = "Готово! Подтвердите почту.";
             }
         }
     </script>
