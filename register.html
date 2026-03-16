@@ -1,1 +1,124 @@
-в разработке
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDK — Регистрация</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-card {
+            background: #050505;
+            padding: 40px;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+        .logo { max-width: 150px; margin-bottom: 25px; border-radius: 10px; }
+        h2 { font-size: 14px; letter-spacing: 3px; color: #444; margin-bottom: 30px; }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #111;
+            border: 1px solid #222;
+            color: #fff;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+        }
+        input:focus { border-color: #555; }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #ddd; }
+
+        #status { margin-top: 20px; font-size: 12px; min-height: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <img src="idk_logo.png" alt="IDK" class="logo">
+        <h2>REGISTRATION</h2>
+        
+        <input type="text" id="username" placeholder="Никнейм">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Пароль">
+        
+        <button class="btn" onclick="handleRegister()">СОЗДАТЬ АККАУНТ</button>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://oogxduktdzweqvbfxeiz.supabase.co';
+        const supabaseKey = 'sb_publishable_g8o9XJ0Emk0bWQZD3C4h2A_FH-JVd_M';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function handleRegister() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+            const status = document.getElementById('status');
+
+            if (!username) {
+                status.innerText = "Введите никнейм";
+                return;
+            }
+
+            status.style.color = "#888";
+            status.innerText = "Создание аккаунта...";
+
+            // 1. Регистрация в Auth
+            const { data, error } = await _supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                status.style.color = "#ff4444";
+                status.innerText = error.message;
+            } else if (data.user) {
+                // 2. Создание записи в твоей таблице profiles
+                const { error: profileError } = await _supabase
+                    .from('profiles')
+                    .insert([
+                        { id: data.user.id, username: username }
+                    ]);
+
+                if (profileError) {
+                    status.style.color = "#ff4444";
+                    status.innerText = "Ошибка профиля: " + profileError.message;
+                } else {
+                    status.style.color = "#00ff00";
+                    status.innerText = "Успех! Подтвердите почту и входите.";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
