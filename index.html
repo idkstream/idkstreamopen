@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDK — Платформа свободного стриминга</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-container {
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            background: #050505;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+        }
+
+        .logo-box {
+            margin-bottom: 30px;
+        }
+
+        .logo-box img {
+            max-width: 220px;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #ccc;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 35px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .features li {
+            margin: 8px 0;
+        }
+
+        .features span {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .join-btn {
+            display: block;
+            background: #fff;
+            color: #000;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: 0.3s ease;
+        }
+
+        .join-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #444;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div class="logo-box">
+            <img src="idk.jpeg" alt="IDK Streaming Service">
+        </div>
+
+        <div class="description">
+            Добро пожаловать в <strong>IDK</strong> — пространство, где ваш контент ограничен только вашей ответственностью.
+        </div>
+
+        <ul class="features">
+            <li>• Прямые трансляции с <span>10 лет</span></li>
+            <li>• Свобода самовыражения и речи</li>
+            <li>• Трансляции с камерой без ограничений</li>
+        </ul>
+
+        <a href="/register" class="join-btn">Создать аккаунт</a>
+
+        <div class="footer-note">
+            Присоединяясь, вы подтверждаете, что самостоятельно несете полную ответственность за содержание своих трансляций и соблюдение законодательства.
+        </div>
+    </div>
+
+</body>
+</html>
